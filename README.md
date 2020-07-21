@@ -21,18 +21,22 @@ jvdx's babel preset. The `@jvdx/babel-preset-jvdx` preset includes:
 
 ```bash
 # Using npm
-$ npm i -D @jvdx/babel-preset-jvdx
+$ npm i -D @babel/core @jvdx/babel-preset-jvdx
 
 # Using yarn
-$ yarn add -D @jvdx/babel-preset-jvdx
+$ yarn add -D @babel/core @jvdx/babel-preset-jvdx
 ```
 
-(2) Configure babel in your `.babelrc`:
+(2) Configure babel in your `package.json`:
 
-```text
+```json
 {
-  "presets": ["@jvdx/babel-preset-jvdx"],
-  "plugins": []
+  "babel": {
+    "presets": [
+      "@jvdx/babel-preset-jvdx"
+    ],
+    "plugins": []
+  }
 }
 ```
 
@@ -42,22 +46,21 @@ To configure the included presets/plugins, do not add them to presets or
 plugins in your custom `.babelrc`. Instead, configure them on the
 `@jvdx/babel-preset-jvdx` preset, like so:
 
-```text
+```json
 {
-  "presets": [
-    [
-      "@jvdx/babel-preset-jvdx",
-      {
+  "babel": {
+    "presets": [
+      ["@jvdx/babel-preset-jvdx", {
         "preset-env": {},
-        "experimental-modern-preset": {}
-        "preset-react": {}
-        "preset-typescript": {}
-        "class-properties": {}
-        "transform-runtime": {}
-      }
-    ]
-  ],
-  "plugins": []
+        "experimental-modern-preset": {},
+        "preset-react": {},
+        "preset-typescript": {},
+        "class-properties": {},
+        "transform-runtime": {},
+      }]
+    ],
+    "plugins": []
+  }
 }
 ```
 
