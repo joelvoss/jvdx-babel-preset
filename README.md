@@ -2,18 +2,18 @@
 
 jvdx's babel preset. The `@jvdx/babel-preset-jvdx` preset includes:
 
-  - plugin-proposal-class-properties
-  - plugin-proposal-nullish-coalescing-operator
-  - plugin-proposal-numeric-separator
-  - plugin-proposal-object-rest-spread
-  - plugin-proposal-optional-chaining
-  - plugin-syntax-bigint
-  - plugin-syntax-dynamic-import
-  - plugin-transform-runtime
-  - plugin-transform-react-remove-prop-types
-  - preset-env
-  - preset-react
-  - preset-typescript
+- plugin-proposal-class-properties
+- plugin-proposal-nullish-coalescing-operator
+- plugin-proposal-numeric-separator
+- plugin-proposal-object-rest-spread
+- plugin-proposal-optional-chaining
+- plugin-syntax-bigint
+- plugin-syntax-dynamic-import
+- plugin-transform-runtime
+- plugin-transform-react-remove-prop-types
+- preset-env
+- preset-react
+- preset-typescript
 
 ## Installation
 
@@ -31,12 +31,10 @@ $ yarn add -D @babel/core @jvdx/babel-preset-jvdx
 
 ```json
 {
-  "babel": {
-    "presets": [
-      "@jvdx/babel-preset-jvdx"
-    ],
-    "plugins": []
-  }
+	"babel": {
+		"presets": ["@jvdx/babel-preset-jvdx"],
+		"plugins": []
+	}
 }
 ```
 
@@ -48,19 +46,22 @@ plugins in your custom `.babelrc`. Instead, configure them on the
 
 ```json
 {
-  "babel": {
-    "presets": [
-      ["@jvdx/babel-preset-jvdx", {
-        "preset-env": {},
-        "experimental-modern-preset": {},
-        "preset-react": {},
-        "preset-typescript": {},
-        "class-properties": {},
-        "transform-runtime": {},
-      }]
-    ],
-    "plugins": []
-  }
+	"babel": {
+		"presets": [
+			[
+				"@jvdx/babel-preset-jvdx",
+				{
+					"preset-env": {},
+					"experimental-modern-preset": {},
+					"preset-react": {},
+					"preset-typescript": {},
+					"class-properties": {},
+					"transform-runtime": {}
+				}
+			]
+		],
+		"plugins": []
+	}
 }
 ```
 
