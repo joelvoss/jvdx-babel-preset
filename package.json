@@ -4,6 +4,14 @@
   "description": "jvdx's babel preset",
   "author": "Joel Voss <mail@joelvoss.com>",
   "license": "MIT",
+  "homepage": "https://github.com/joelvoss/babel-preset-jvdx",
+  "bugs": {
+    "url": "https://github.com/joelvoss/babel-preset-jvdx/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joelvoss/babel-preset-jvdx.git"
+  },
   "main": "index.js",
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "7.10.4",
