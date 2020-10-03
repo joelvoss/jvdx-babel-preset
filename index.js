@@ -1,17 +1,12 @@
 const env = process.env.NODE_ENV;
-const isProduction = env === 'production';
 const isDevelopment = env === 'development';
 const isTest = env === 'test';
 
-// Taken from https://github.com/babel/babel/commit/d60c5e1736543a6eac4b549553e107a9ba967051#diff-b4beead8ad9195361b4537601cc22532R158
-function supportsStaticESM(caller) {
-	return !!caller.supportsStaticESM;
-}
-
 module.exports = (api, options = {}) => {
-	const supportsESM = api.caller(supportsStaticESM);
-	const isServer = api.caller(caller => !!caller && caller.isServer);
-	const isModern = api.caller(caller => !!caller && caller.isModern);
+  const isModern = api.caller((caller) => !!caller && caller.isModern)
+  const hasJsxRuntime = Boolean(
+    api.caller((caller) => !!caller && caller.hasJsxRuntime)
+  )
 
 	const isLaxModern =
 		isModern ||
@@ -19,20 +14,26 @@ module.exports = (api, options = {}) => {
 			options['preset-env'].targets &&
 			options['preset-env'].targets.esmodules === true);
 
-	const presetEnvConfig = {
-		// In the test environment `modules` is often needed to be set to true,
-		// babel figures that out by itself using the `'auto'` option
-		// In production/development this option is set to `false` so that webpack
-		// can handle import/export with tree-shaking
-		modules: 'auto',
-		exclude: ['transform-typeof-symbol'],
-		...options['preset-env'],
-	};
+		const presetEnvConfig = {
+			// In the test environment `modules` is often needed to be set to true,
+			// babel figures that out by itself using the `'auto'` option.
+			modules: 'auto',
+			targets: isLaxModern ? { esmodules: true } : null,
+			loose: true,
+			useBuiltIns: false,
+			bugfixes: isLaxModern,
+			exclude: [
+				'transform-typeof-symbol',
+				'transform-async-to-generator',
+				'transform-regenerator',
+			],
+			...options['preset-env'],
+		};
 
-	// When transpiling for the server or tests, target the current Node version
-	// if not explicitly specified:
+	// When transpiling for tests, target the current Node version if not
+	// explicitly specified
 	if (
-		(isServer || isTest) &&
+		isTest &&
 		(!presetEnvConfig.targets ||
 			!(
 				typeof presetEnvConfig.targets === 'object' &&
@@ -48,7 +49,7 @@ module.exports = (api, options = {}) => {
 
 	// specify a preset to use instead of @babel/preset-env
 	const customModernPreset =
-		isLaxModern && options['experimental-modern-preset'];
+		isLaxModern && [require('@babel/preset-modules')];
 
 	return {
 		sourceType: 'unambiguous',
@@ -63,7 +64,7 @@ module.exports = (api, options = {}) => {
 					// This adds @babel/plugin-transform-react-jsx-source and
 					// @babel/plugin-transform-react-jsx-self automatically in development
 					development: isDevelopment || isTest,
-					pragma: '__jsx',
+					...(hasJsxRuntime ? { runtime: 'automatic' } : { pragma: '__jsx' }),
 					...options['preset-react'],
 				},
 			],
@@ -80,44 +81,22 @@ module.exports = (api, options = {}) => {
 					lib: true,
 				},
 			],
-			require('@babel/plugin-syntax-dynamic-import'),
+			require('@babel/plugin-syntax-import-meta'),
 			[
 				require('@babel/plugin-proposal-class-properties'),
-				options['class-properties'] || {},
+				options['class-properties'] || { loose: true },
 			],
 			[
-				require('@babel/plugin-proposal-object-rest-spread'),
+				require('./transform-fast-rest'),
 				{
-					useBuiltIns: true,
+					// Use inline [].slice.call(arguments)
+					helper: false,
+					literal: true,
 				},
 			],
-			!isServer && [
-				require('@babel/plugin-transform-runtime'),
-				{
-					corejs: false,
-					helpers: true,
-					regenerator: true,
-					useESModules: supportsESM && presetEnvConfig.modules !== 'commonjs',
-					absoluteRuntime: process.versions.pnp ? __dirname : undefined,
-					...options['transform-runtime'],
-				},
-			],
-			isProduction && [
-				require('babel-plugin-transform-react-remove-prop-types'),
-				{
-					removeImport: true,
-				},
-			],
+			require('babel-plugin-macros'),
 			require('@babel/plugin-proposal-optional-chaining'),
 			require('@babel/plugin-proposal-nullish-coalescing-operator'),
-			isServer && require('@babel/plugin-syntax-bigint'),
-			[require('@babel/plugin-proposal-numeric-separator').default, false],
 		].filter(Boolean),
-		overrides: [
-			{
-				test: /\.tsx?$/,
-				plugins: [require('@babel/plugin-proposal-numeric-separator').default],
-			},
-		],
 	};
 };
