@@ -3,10 +3,10 @@ const isDevelopment = env === 'development';
 const isTest = env === 'test';
 
 module.exports = (api, options = {}) => {
-  const isModern = api.caller((caller) => !!caller && caller.isModern)
-  const hasJsxRuntime = Boolean(
-    api.caller((caller) => !!caller && caller.hasJsxRuntime)
-  )
+	const isModern = api.caller(caller => !!caller && caller.isModern);
+	const hasJsxRuntime = Boolean(
+		api.caller(caller => !!caller && caller.hasJsxRuntime),
+	);
 
 	const isLaxModern =
 		isModern ||
@@ -14,21 +14,21 @@ module.exports = (api, options = {}) => {
 			options['preset-env'].targets &&
 			options['preset-env'].targets.esmodules === true);
 
-		const presetEnvConfig = {
-			// In the test environment `modules` is often needed to be set to true,
-			// babel figures that out by itself using the `'auto'` option.
-			modules: 'auto',
-			targets: isLaxModern ? { esmodules: true } : null,
-			loose: true,
-			useBuiltIns: false,
-			bugfixes: isLaxModern,
-			exclude: [
-				'transform-typeof-symbol',
-				'transform-async-to-generator',
-				'transform-regenerator',
-			],
-			...options['preset-env'],
-		};
+	const presetEnvConfig = {
+		// In the test environment `modules` is often needed to be set to true,
+		// babel figures that out by itself using the `'auto'` option.
+		modules: 'auto',
+		targets: isLaxModern ? { esmodules: true } : null,
+		loose: true,
+		useBuiltIns: false,
+		bugfixes: isLaxModern,
+		exclude: [
+			'transform-typeof-symbol',
+			'transform-async-to-generator',
+			'transform-regenerator',
+		],
+		...options['preset-env'],
+	};
 
 	// When transpiling for tests, target the current Node version if not
 	// explicitly specified
@@ -47,9 +47,11 @@ module.exports = (api, options = {}) => {
 		};
 	}
 
+	const isNodeTarget =
+		presetEnvConfig.targets && presetEnvConfig.targets.node != null;
+
 	// specify a preset to use instead of @babel/preset-env
-	const customModernPreset =
-		isLaxModern && [require('@babel/preset-modules')];
+	const customModernPreset = isLaxModern && [require('@babel/preset-modules')];
 
 	return {
 		sourceType: 'unambiguous',
@@ -86,6 +88,10 @@ module.exports = (api, options = {}) => {
 				require('@babel/plugin-proposal-class-properties'),
 				options['class-properties'] || { loose: true },
 			],
+			!isModern &&
+				!isNodeTarget && [require('babel-plugin-transform-async-to-promises')],
+			!isModern &&
+				!isNodeTarget && [require('@babel/plugin-transform-regenerator')],
 			[
 				require('./plugins/transform-fast-rest'),
 				{
