@@ -87,7 +87,7 @@ module.exports = (api, options = {}) => {
 				options['class-properties'] || { loose: true },
 			],
 			[
-				require('./transform-fast-rest'),
+				require('./plugins/transform-fast-rest'),
 				{
 					// Use inline [].slice.call(arguments)
 					helper: false,
