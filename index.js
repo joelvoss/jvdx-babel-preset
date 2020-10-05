@@ -3,25 +3,19 @@ const isDevelopment = env === 'development';
 const isTest = env === 'test';
 
 module.exports = (api, options = {}) => {
-	const isModern = api.caller(caller => !!caller && caller.isModern);
-	const hasJsxRuntime = Boolean(
-		api.caller(caller => !!caller && caller.hasJsxRuntime),
+	const isModern = Boolean(api.caller(caller => !!caller && caller.isModern));
+	const isTypescript = Boolean(
+		api.caller(caller => !!caller && caller.isTypescript),
 	);
-
-	const isLaxModern =
-		isModern ||
-		(options['preset-env'] &&
-			options['preset-env'].targets &&
-			options['preset-env'].targets.esmodules === true);
 
 	const presetEnvConfig = {
 		// In the test environment `modules` is often needed to be set to true,
 		// babel figures that out by itself using the `'auto'` option.
 		modules: 'auto',
-		targets: isLaxModern ? { esmodules: true } : null,
+		targets: isModern ? { esmodules: true } : null,
 		loose: true,
 		useBuiltIns: false,
-		bugfixes: isLaxModern,
+		bugfixes: isModern,
 		exclude: [
 			'transform-typeof-symbol',
 			'transform-async-to-generator',
@@ -30,79 +24,76 @@ module.exports = (api, options = {}) => {
 		...options['preset-env'],
 	};
 
-	// When transpiling for tests, target the current Node version if not
-	// explicitly specified
-	if (
-		isTest &&
-		(!presetEnvConfig.targets ||
-			!(
-				typeof presetEnvConfig.targets === 'object' &&
-				'node' in presetEnvConfig.targets
-			))
-	) {
-		presetEnvConfig.targets = {
-			// Targets the current process' version of Node. This requires apps be
-			// built and deployed on the same version of Node.
-			node: 'current',
-		};
-	}
-
 	const isNodeTarget =
 		presetEnvConfig.targets && presetEnvConfig.targets.node != null;
-
-	// specify a preset to use instead of @babel/preset-env
-	const customModernPreset = isLaxModern && [require('@babel/preset-modules')];
 
 	return {
 		sourceType: 'unambiguous',
 		presets: [
-			customModernPreset || [
-				require('@babel/preset-env').default,
-				presetEnvConfig,
-			],
+			[require.resolve('@babel/preset-env'), presetEnvConfig],
 			[
-				require('@babel/preset-react'),
+				require.resolve('@babel/preset-react'),
 				{
 					// This adds @babel/plugin-transform-react-jsx-source and
 					// @babel/plugin-transform-react-jsx-self automatically in development
-					development: isDevelopment || isTest,
-					...(hasJsxRuntime ? { runtime: 'automatic' } : { pragma: '__jsx' }),
+					development: isDevelopment,
+					runtime: 'automatic',
 					...options['preset-react'],
 				},
 			],
 			[
-				require('@babel/preset-typescript'),
+				require.resolve('@babel/preset-typescript'),
 				{ allowNamespaces: true, ...options['preset-typescript'] },
 			],
 		],
 		plugins: [
+			[require.resolve('@babel/plugin-syntax-import-meta')],
 			[
-				require('./plugins/optimize-hook-destructuring'),
+				require.resolve('./plugins/optimize-hook-destructuring'),
 				{
 					// Only optimize hook functions imported from React/Preact
 					lib: true,
 				},
 			],
-			require('@babel/plugin-syntax-import-meta'),
-			[
-				require('@babel/plugin-proposal-class-properties'),
-				options['class-properties'] || { loose: true },
+			!isTypescript && [
+				require.resolve('@babel/plugin-transform-flow-strip-types'),
 			],
 			!isModern &&
-				!isNodeTarget && [require('babel-plugin-transform-async-to-promises')],
+				!isNodeTarget && [
+					require.resolve('babel-plugin-transform-async-to-promises'),
+					{
+						inlineHelpers: true,
+						externalHelpers: false,
+						minify: true,
+					},
+				],
 			!isModern &&
-				!isNodeTarget && [require('@babel/plugin-transform-regenerator')],
+				!isNodeTarget && [
+					require.resolve('./plugins/transform-fast-rest'),
+					{
+						// Use inline [].slice.call(arguments)
+						helper: false,
+						literal: true,
+					},
+				],
 			[
-				require('./plugins/transform-fast-rest'),
-				{
-					// Use inline [].slice.call(arguments)
-					helper: false,
-					literal: true,
-				},
+				require.resolve('@babel/plugin-proposal-class-properties'),
+				{ loose: true, ...options['class-properties'] },
 			],
-			require('babel-plugin-macros'),
-			require('@babel/plugin-proposal-optional-chaining'),
-			require('@babel/plugin-proposal-nullish-coalescing-operator'),
+			!isModern &&
+				!isNodeTarget && [
+					require.resolve('@babel/plugin-transform-regenerator'),
+					{ async: false },
+				],
+			// Typescript supports optional chaining and nullish coaliescing by
+			// default
+			!isTypescript && [
+				require.resolve('@babel/plugin-proposal-optional-chaining'),
+			],
+			!isTypescript && [
+				require.resolve('@babel/plugin-proposal-nullish-coalescing-operator'),
+			],
+			[require.resolve('babel-plugin-macros')],
 		].filter(Boolean),
 	};
 };
