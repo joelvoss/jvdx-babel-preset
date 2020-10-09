@@ -1,4 +1,4 @@
-# @jvdx/babel
+# @jvdx/babel-preset
 
 jvdx's babel preset. It includes the following presets and plugins:
 
@@ -23,10 +23,10 @@ jvdx's babel preset. It includes the following presets and plugins:
 
 ```bash
 # Using npm
-$ npm i -D @babel/core @jvdx/babel
+$ npm i -D @babel/core @jvdx/babel-preset
 
 # Using yarn
-$ yarn add -D @babel/core @jvdx/babel
+$ yarn add -D @babel/core @jvdx/babel-preset
 ```
 
 (2) Configure babel:
@@ -35,7 +35,7 @@ $ yarn add -D @babel/core @jvdx/babel
 // babel.config.js
 {
 	"babel": {
-		"presets": ["@jvdx/babel"]
+		"presets": ["@jvdx/babel-preset"]
 	}
 }
 ```
@@ -44,14 +44,14 @@ $ yarn add -D @babel/core @jvdx/babel
 
 To configure the included presets/plugins, do not add them to presets or
 plugins in your custom babel configuration. Instead, configure them on the
-`@jvdx/babel` preset, like so:
+`@jvdx/babel-preset` preset, like so:
 
 ```json
 {
 	"babel": {
 		"presets": [
 			[
-				"@jvdx/babel",
+				"@jvdx/babel-preset",
 				{
 					"preset-react": {},
 					"preset-typescript": {},

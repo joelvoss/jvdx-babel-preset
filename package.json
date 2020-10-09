@@ -1,16 +1,16 @@
 {
-  "name": "@jvdx/babel",
+  "name": "@jvdx/babel-preset",
   "version": "0.5.1",
   "description": "jvdx's babel preset",
   "author": "Joel Voss <mail@joelvoss.com>",
   "license": "MIT",
-  "homepage": "https://github.com/joelvoss/jvdx-babel",
+  "homepage": "https://github.com/joelvoss/jvdx-babel-preset",
   "bugs": {
-    "url": "https://github.com/joelvoss/jvdx-babel/issues"
+    "url": "https://github.com/joelvoss/jvdx-babel-preset/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joelvoss/jvdx-babel.git"
+    "url": "git+https://github.com/joelvoss/jvdx-babel-preset.git"
   },
   "main": "index.js",
   "dependencies": {
