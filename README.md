@@ -1,19 +1,21 @@
-# @jvdx/babel-preset-jvdx
+# @jvdx/babel
 
-jvdx's babel preset. The `@jvdx/babel-preset-jvdx` preset includes:
+jvdx's babel preset. It includes the following presets and plugins:
 
-- plugin-proposal-class-properties
-- plugin-proposal-nullish-coalescing-operator
-- plugin-proposal-numeric-separator
-- plugin-proposal-object-rest-spread
-- plugin-proposal-optional-chaining
-- plugin-syntax-bigint
-- plugin-syntax-dynamic-import
-- plugin-transform-runtime
-- plugin-transform-react-remove-prop-types
-- preset-env
-- preset-react
-- preset-typescript
+**Plugins**
+- proposal-class-properties
+- proposal-nullish-coalescing-operator
+- proposal-optional-chaining
+- syntax-import-meta
+- transform-flow-strip-types
+- transform-regenerator
+- macros
+- transform-async-to-promises
+
+**Presets**
+- env
+- react
+- typescript
 
 ## Installation
 
@@ -21,19 +23,19 @@ jvdx's babel preset. The `@jvdx/babel-preset-jvdx` preset includes:
 
 ```bash
 # Using npm
-$ npm i -D @babel/core @jvdx/babel-preset-jvdx
+$ npm i -D @babel/core @jvdx/babel
 
 # Using yarn
-$ yarn add -D @babel/core @jvdx/babel-preset-jvdx
+$ yarn add -D @babel/core @jvdx/babel
 ```
 
-(2) Configure babel in your `package.json`:
+(2) Configure babel:
 
 ```json
+// babel.config.js
 {
 	"babel": {
-		"presets": ["@jvdx/babel-preset-jvdx"],
-		"plugins": []
+		"presets": ["@jvdx/babel"]
 	}
 }
 ```
@@ -41,26 +43,22 @@ $ yarn add -D @babel/core @jvdx/babel-preset-jvdx
 ## Configuration
 
 To configure the included presets/plugins, do not add them to presets or
-plugins in your custom `.babelrc`. Instead, configure them on the
-`@jvdx/babel-preset-jvdx` preset, like so:
+plugins in your custom babel configuration. Instead, configure them on the
+`@jvdx/babel` preset, like so:
 
 ```json
 {
 	"babel": {
 		"presets": [
 			[
-				"@jvdx/babel-preset-jvdx",
+				"@jvdx/babel",
 				{
-					"preset-env": {},
-					"experimental-modern-preset": {},
 					"preset-react": {},
 					"preset-typescript": {},
-					"class-properties": {},
-					"transform-runtime": {}
+					"class-properties": {}
 				}
 			]
 		],
-		"plugins": []
 	}
 }
 ```
