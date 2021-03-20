@@ -1,6 +1,6 @@
 {
   "name": "@jvdx/babel-preset",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "jvdx's babel preset",
   "author": "Joel Voss <mail@joelvoss.com>",
   "license": "MIT",
