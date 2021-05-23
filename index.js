@@ -80,6 +80,15 @@ module.exports = (api, options = {}) => {
 				require.resolve('@babel/plugin-proposal-class-properties'),
 				{ loose: true, ...options['class-properties'] },
 			],
+			// Though the "loose" option was set to "true" in our @babel/preset-env 
+			// config, it will not be used for @babel/plugin-proposal-private-methods 
+			// since the "loose" mode option was set to "false" for
+			// @babel/plugin-proposal-class-properties.
+			// The "loose" option must be the same for:
+			// * @babel/Plugin-proposal-class-properties 
+			// * @babel/plugin-proposal-private-methods
+			// * @babel/plugin-proposal-private-property-in-object
+			["@babel/plugin-proposal-private-methods", { loose: false }],
 			!isModern &&
 				!isNodeTarget && [
 					require.resolve('@babel/plugin-transform-regenerator'),
