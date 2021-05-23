@@ -1,6 +1,5 @@
 const env = process.env.NODE_ENV;
 const isDevelopment = env === 'development';
-const isTest = env === 'test';
 
 module.exports = (api, options = {}) => {
 	const isModern = Boolean(api.caller(caller => !!caller && caller.isModern));
@@ -88,7 +87,10 @@ module.exports = (api, options = {}) => {
 			// * @babel/Plugin-proposal-class-properties 
 			// * @babel/plugin-proposal-private-methods
 			// * @babel/plugin-proposal-private-property-in-object
-			["@babel/plugin-proposal-private-methods", { loose: false }],
+			[
+				require.resolve('@babel/plugin-proposal-private-methods'),
+				{ loose: true }
+			],
 			!isModern &&
 				!isNodeTarget && [
 					require.resolve('@babel/plugin-transform-regenerator'),
