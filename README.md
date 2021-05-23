@@ -55,7 +55,8 @@ plugins in your custom babel configuration. Instead, configure them on the
 				{
 					"preset-react": {},
 					"preset-typescript": {},
-					"class-properties": {}
+					"class-properties": {},
+					"private-methods": {},
 				}
 			]
 		],

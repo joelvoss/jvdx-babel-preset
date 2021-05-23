@@ -89,7 +89,7 @@ module.exports = (api, options = {}) => {
 			// * @babel/plugin-proposal-private-property-in-object
 			[
 				require.resolve('@babel/plugin-proposal-private-methods'),
-				{ loose: true }
+				{ loose: true, ...options['private-methods'] }
 			],
 			!isModern &&
 				!isNodeTarget && [
