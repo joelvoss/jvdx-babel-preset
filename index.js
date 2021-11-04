@@ -91,6 +91,9 @@ module.exports = (api, options = {}) => {
 				require.resolve('@babel/plugin-proposal-private-methods'),
 				{ loose: true, ...options['private-methods'] }
 			],
+			[require.resolve('@babel/plugin-proposal-private-property-in-object'),
+				{ loose: true, ...options['private-property-in-object'] }
+			],
 			!isModern &&
 				!isNodeTarget && [
 					require.resolve('@babel/plugin-transform-regenerator'),
