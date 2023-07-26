@@ -12,6 +12,9 @@
     "type": "git",
     "url": "git+https://github.com/joelvoss/jvdx-babel-preset.git"
   },
+  "engines": {
+    "node": ">16"
+  },
   "main": "index.js",
   "scripts": {
     "test": "echo \"No tests\" && exit 0",
