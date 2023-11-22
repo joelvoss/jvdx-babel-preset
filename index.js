@@ -28,6 +28,7 @@ module.exports = (api, options = {}) => {
 
 	return {
 		sourceType: 'unambiguous',
+		assumptions: options['assumptions'],
 		presets: [
 			[require.resolve('@babel/preset-env'), presetEnvConfig],
 			[
@@ -46,7 +47,6 @@ module.exports = (api, options = {}) => {
 			],
 		],
 		plugins: [
-			[require.resolve('@babel/plugin-syntax-import-meta')],
 			[
 				require.resolve('./plugins/optimize-hook-destructuring'),
 				{
@@ -75,38 +75,11 @@ module.exports = (api, options = {}) => {
 						literal: true,
 					},
 				],
-			[
-				require.resolve('@babel/plugin-proposal-class-properties'),
-				{ loose: true, ...options['class-properties'] },
-			],
-			// Though the "loose" option was set to "true" in our @babel/preset-env 
-			// config, it will not be used for @babel/plugin-proposal-private-methods 
-			// since the "loose" mode option was set to "false" for
-			// @babel/plugin-proposal-class-properties.
-			// The "loose" option must be the same for:
-			// * @babel/Plugin-proposal-class-properties 
-			// * @babel/plugin-proposal-private-methods
-			// * @babel/plugin-proposal-private-property-in-object
-			[
-				require.resolve('@babel/plugin-proposal-private-methods'),
-				{ loose: true, ...options['private-methods'] }
-			],
-			[require.resolve('@babel/plugin-proposal-private-property-in-object'),
-				{ loose: true, ...options['private-property-in-object'] }
-			],
 			!isModern &&
 				!isNodeTarget && [
 					require.resolve('@babel/plugin-transform-regenerator'),
 					{ async: false },
 				],
-			// Typescript supports optional chaining and nullish coaliescing by
-			// default
-			!isTypescript && [
-				require.resolve('@babel/plugin-proposal-optional-chaining'),
-			],
-			!isTypescript && [
-				require.resolve('@babel/plugin-proposal-nullish-coalescing-operator'),
-			],
 			[require.resolve('babel-plugin-macros')],
 		].filter(Boolean),
 	};

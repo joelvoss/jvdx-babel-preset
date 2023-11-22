@@ -3,11 +3,7 @@
 jvdx's babel preset. It includes the following presets and plugins:
 
 **Plugins**
-- proposal-class-properties
-- proposal-nullish-coalescing-operator
-- proposal-optional-chaining
 - syntax-import-meta
-- transform-flow-strip-types
 - transform-regenerator
 - macros
 - transform-async-to-promises
@@ -53,10 +49,10 @@ plugins in your custom babel configuration. Instead, configure them on the
 			[
 				"@jvdx/babel-preset",
 				{
-					"preset-react": {},
-					"preset-typescript": {},
-					"class-properties": {},
-					"private-methods": {},
+					"assumptions": {/*...*/},
+					"preset-env": {/*...*/},
+					"preset-react": {/*...*/},
+					"preset-typescript": {/*...*/},
 				}
 			]
 		],
