@@ -21,9 +21,9 @@
     "clean": "rm -rf node_modules"
   },
   "dependencies": {
-    "@babel/plugin-transform-flow-strip-types": "^7.25.9",
+    "@babel/plugin-transform-flow-strip-types": "^7.26.5",
     "@babel/plugin-transform-regenerator": "^7.25.9",
-    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-env": "^7.26.9",
     "@babel/preset-react": "^7.26.3",
     "@babel/preset-typescript": "^7.26.0",
     "babel-plugin-macros": "^3.1.0",
