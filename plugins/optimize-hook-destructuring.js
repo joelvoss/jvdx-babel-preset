@@ -2,7 +2,8 @@
 const isHook = /^use[A-Z]/;
 
 // Matches only built-in hooks provided by React et al
-const isBuiltInHook = /^use(Callback|Context|DebugValue|Effect|ImperativeHandle|LayoutEffect|Memo|Reducer|Ref|State)$/;
+const isBuiltInHook =
+	/^use(Callback|Context|DebugValue|Effect|ImperativeHandle|LayoutEffect|Memo|Reducer|Ref|State)$/;
 
 module.exports = function ({ types: t }) {
 	const visitor = {

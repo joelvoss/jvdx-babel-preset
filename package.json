@@ -21,16 +21,16 @@
     "clean": "rm -rf node_modules"
   },
   "dependencies": {
-    "@babel/plugin-transform-flow-strip-types": "^7.27.1",
-    "@babel/plugin-transform-regenerator": "^7.29.0",
-    "@babel/preset-env": "^7.29.5",
-    "@babel/preset-react": "^7.28.5",
-    "@babel/preset-typescript": "^7.28.5",
+    "@babel/plugin-transform-flow-strip-types": "^8.0.1",
+    "@babel/plugin-transform-regenerator": "^8.0.2",
+    "@babel/preset-env": "^8.0.2",
+    "@babel/preset-react": "^8.0.1",
+    "@babel/preset-typescript": "^8.0.1",
     "babel-plugin-macros": "^3.1.0",
     "babel-plugin-transform-async-to-promises": "^0.8.18"
   },
   "devDependencies": {
-    "@babel/core": ">=7"
+    "@babel/core": ">=8"
   },
   "peerDependencies": {
     "@babel/core": ">=7"
